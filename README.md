@@ -4,9 +4,11 @@
 
 `AGENTS.md` or `CLAUDE.md` are powerful ways to instruct AI agents.
 
-## Usecase 1: You cannot add agent instructions to the repository.
+## Usecase 1: You're required to sneak your AI usage.
 
-Some repositories should not gain new agent-instruction files. Keep your personal repo guidance outside the project tree instead.
+But if you put them in the repo and jot down prompts all day long, your boss who think you are slacking off might be angry.
+
+Sneak your AI instructions out of the repo and use it secretely.
 
 ## Usecase 2: You're an enthusiastic open-source contributor of a legacy project.
 
