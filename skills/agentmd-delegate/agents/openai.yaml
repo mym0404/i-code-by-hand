@@ -1,0 +1,4 @@
+interface:
+  display_name: "AgentMD Delegate"
+  short_description: "Use shared repo notes outside project files"
+  default_prompt: "Use $agentmd-delegate before coding in this repo."
