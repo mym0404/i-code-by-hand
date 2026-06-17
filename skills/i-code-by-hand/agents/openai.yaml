@@ -1,4 +1,7 @@
 interface:
-  display_name: "i-code-by-hand"
-  short_description: "Local notes for hand-written code"
-  default_prompt: "Use $i-code-by-hand before coding in this repo."
+  display_name: "I Code By Hand"
+  short_description: "Resolve repo guidance before coding"
+  default_prompt: "Use $i-code-by-hand to resolve repo guidance before coding, reviewing, debugging, or storing repo notes."
+
+policy:
+  allow_implicit_invocation: true
