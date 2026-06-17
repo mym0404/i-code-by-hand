@@ -1,6 +1,6 @@
 ---
 name: i-code-by-hand
-description: Use before any repository-specific coding, review, debugging, refactoring, explanation, or planning task to resolve agent guidance from local AGENTS.md/CLAUDE.md or shared ~/.icodebyhand notes. Also use when the user asks to remember, store, update, bootstrap, or revise repo-specific agent guidance without a clear local-file target. When explicitly invoked for guidance or memory work, manage the matching ~/.icodebyhand repo memory directory with AGENTS.md as the main entry point. Use shared repo-specific notes only when the project root does not provide AGENTS.md or CLAUDE.md. Do not use it to replace explicit requests to create or edit project-local AGENTS.md or CLAUDE.md.
+description: Use before repository-specific coding, review, debugging, refactoring, explanation, or planning to resolve agent guidance from local AGENTS.md/CLAUDE.md or shared ~/.icodebyhand notes. Also use when the user asks to remember, store, organize, update, bootstrap, or revise repo-specific guidance without a clear local-file target. Use the bundled status CLI to decide local, global, or ask. Do not replace explicit requests to edit project-local AGENTS.md or CLAUDE.md.
 ---
 
 # i-code-by-hand
@@ -21,12 +21,31 @@ Global memory root:
 
 | Situation | Required behavior |
 | --- | --- |
-| User explicitly invokes this skill for guidance or memory work | Treat the task as global knowledge-document management under `~/.icodebyhand`. |
+| User explicitly invokes this skill for guidance or memory work | Run the status command and use the returned knowledge location. |
 | Project has `AGENTS.md` or `CLAUDE.md` | Follow local instructions. Do not read or apply `~/.icodebyhand` for normal work. |
 | Project has no local instruction file | Check `~/.icodebyhand/{repo-key}/AGENTS.md` as the external repo-memory entry point before repo-specific work. |
 | Bootstrap asks for an instruction document but the target is unclear | Ask whether to create global `~/.icodebyhand/{repo-key}/` memory with an `AGENTS.md` entry point or a project-local `AGENTS.md`/`CLAUDE.md` before writing. |
 | User asks to update global memory | Update the matching `~/.icodebyhand/{repo-key}` memory directory unless they name a local file. Keep `AGENTS.md` as the entry point. |
 | User asks to create or edit local `AGENTS.md` or `CLAUDE.md` | Do exactly that local-file task. Do not redirect it to `~/.icodebyhand`. |
+
+## Knowledge-location status
+
+For requests to organize, remember, store, update, bootstrap, or revise repo-specific knowledge without a named local file, run this first from this skill directory:
+
+```sh
+python3 scripts/i_code_by_hand.py status
+```
+
+The command returns JSON for agent use:
+
+```json
+{"knowledge_location":"global","knowledge_path":"/Users/mj/.icodebyhand/owner/repo","project_key":"owner/repo","should_ask_user":false}
+```
+
+- If `knowledge_location` is `global`, do not create or edit project-local `AGENTS.md`, `CLAUDE.md`, prompt guides, or instruction documents. Store the knowledge under `knowledge_path`.
+- If `knowledge_location` is `local`, update the local file at `knowledge_path`.
+- If `should_ask_user` is `true`, ask where the knowledge should live before creating or editing files.
+- A request that names a specific local file such as `AGENTS.md`, `CLAUDE.md`, or a project-local path may edit that file directly.
 
 ## Before repo-specific work
 
@@ -71,6 +90,8 @@ If the user explicitly asks to create, edit, replace, remove, or review project-
 
 If the task is an initial setup or bootstrap of agent instructions and the user has not clearly chosen global memory or a project-local instruction file, stop and ask a narrow question before creating or editing files.
 
+Run `python3 scripts/i_code_by_hand.py status` first. If it returns `should_ask_user: true`, ask the user to choose the location. Do not create a project-local prompt guide while the status points to `global` or `ask`.
+
 Ask the user to choose between:
 
 - Global repo memory: `~/.icodebyhand/{repo-key}/` with `AGENTS.md` as the entry point
@@ -112,19 +133,21 @@ Examples:
 
 When the user asks to remember or update repo-specific guidance:
 
-1. Compute the repo key.
-2. Read the existing global `AGENTS.md` entry point if it exists.
-3. Read any routed files that are relevant to the requested memory update.
-4. Create the repo-memory directory if needed.
-5. Store durable guidance in `AGENTS.md` when it is short and central.
-6. Store longer or specialized knowledge in additional files under the same repo-memory directory when that lowers cognitive load.
-7. Update `AGENTS.md` so it points to any additional files an agent should consult.
-8. Remove duplicate, stale, or conflicting guidance while editing.
-9. Keep local project instructions authoritative when they exist.
+1. Run `python3 scripts/i_code_by_hand.py status`.
+2. If `should_ask_user` is `true`, ask where the knowledge should live before creating or editing files.
+3. If `knowledge_location` is `local`, update the local file at `knowledge_path`.
+4. If `knowledge_location` is `global`, read the existing global `AGENTS.md` entry point if it exists.
+5. Read any routed files that are relevant to the requested memory update.
+6. Create the repo-memory directory if needed.
+7. Store durable guidance in `AGENTS.md` when it is short and central.
+8. Store longer or specialized knowledge in additional files under the same repo-memory directory when that lowers cognitive load.
+9. Update `AGENTS.md` so it points to any additional files an agent should consult.
+10. Remove duplicate, stale, or conflicting guidance while editing.
+11. Keep local project instructions authoritative when they exist.
 
-If the user says only "remember this", "store this for this repo", or "update memory", prefer global memory. If they name `AGENTS.md`, `CLAUDE.md`, "project file", or "local instructions", edit the local file they named.
+If the user says only "remember this", "store this for this repo", "organize the knowledge docs", or "update memory", use the status command. If they name `AGENTS.md`, `CLAUDE.md`, "project file", or "local instructions", edit the local file they named.
 
-If the user explicitly invokes this skill while asking to store, revise, or organize guidance, use the global repo memory path even if local instruction files exist. Keep local project instructions authoritative for normal coding behavior, but do not let them prevent global knowledge-document maintenance.
+If the user explicitly invokes this skill while asking to store, revise, or organize guidance, still use the status command. Keep local project instructions authoritative for normal coding behavior, but do not create project-local prompt guides unless the status result or the user names a local file.
 
 Do not store secrets, credentials, tokens, or private personal data. If a requested memory entry would be risky to persist, explain the risk and ask for a safer wording.
 
