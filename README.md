@@ -4,6 +4,9 @@
 
 `AGENTS.md` or `CLAUDE.md` are powerful ways to instruct AI agents.
 
+> [!NOTE]
+> You can use `AGENTS.md` or `CLAUDE.md` placed in outside of the repo.
+
 ## Usecase 1: You're required to sneak your AI usage.
 
 But if you put them in the repo and jot down prompts all day long, your boss who think you are slacking off might be angry.
