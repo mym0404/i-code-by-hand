@@ -1,6 +1,6 @@
 ---
 name: i-code-by-hand
-description: Use at the start of repository-specific coding, review, debugging, refactoring, explanation, and planning tasks to decide whether local AGENTS.md/CLAUDE.md or shared ~/.agentsmd notes apply. Use shared repo-specific notes from ~/.agentsmd when the project root does not provide AGENTS.md or CLAUDE.md. Also use when the user asks to remember, store, update, or revise repo-specific agent guidance without adding files to the project. Do not use it to replace explicit requests to create or edit project-local AGENTS.md or CLAUDE.md.
+description: Use at the start of repository-specific coding, review, debugging, refactoring, explanation, and planning tasks to decide whether local AGENTS.md/CLAUDE.md or shared ~/.icodebyhand notes apply. Use shared repo-specific notes from ~/.icodebyhand when the project root does not provide AGENTS.md or CLAUDE.md. Also use when the user asks to remember, store, update, or revise repo-specific agent guidance without adding files to the project. Do not use it to replace explicit requests to create or edit project-local AGENTS.md or CLAUDE.md.
 ---
 
 # i-code-by-hand
@@ -12,17 +12,17 @@ Use this skill to keep repo-specific agent guidance outside the project tree. It
 Global memory root:
 
 ```text
-~/.agentsmd
+~/.icodebyhand
 ```
 
 ## Decision rules
 
 | Situation | Required behavior |
 | --- | --- |
-| Project has `AGENTS.md` or `CLAUDE.md` | Follow local instructions. Do not read or apply `~/.agentsmd` for normal work. |
-| Project has no local instruction file | Check `~/.agentsmd/{repo-key}/AGENTS.md` before repo-specific work. |
-| User asks to update global memory | Update only the matching `~/.agentsmd` file unless they name a local file. |
-| User asks to create or edit local `AGENTS.md` or `CLAUDE.md` | Do exactly that local-file task. Do not redirect it to `~/.agentsmd`. |
+| Project has `AGENTS.md` or `CLAUDE.md` | Follow local instructions. Do not read or apply `~/.icodebyhand` for normal work. |
+| Project has no local instruction file | Check `~/.icodebyhand/{repo-key}/AGENTS.md` before repo-specific work. |
+| User asks to update global memory | Update only the matching `~/.icodebyhand` file unless they name a local file. |
+| User asks to create or edit local `AGENTS.md` or `CLAUDE.md` | Do exactly that local-file task. Do not redirect it to `~/.icodebyhand`. |
 
 ## Before repo-specific work
 
@@ -45,7 +45,7 @@ ls "$PROJECT_ROOT/AGENTS.md" "$PROJECT_ROOT/CLAUDE.md" 2>/dev/null
 4. If neither file exists, compute the repo key from the project root and look for:
 
 ```text
-~/.agentsmd/{repo-key}/AGENTS.md
+~/.icodebyhand/{repo-key}/AGENTS.md
 ```
 
 5. If that file exists, read it before changing code, reviewing code, debugging, or giving repo-specific advice. Treat this as an automatic pre-work check; do not wait for the user to mention global memory.
@@ -57,7 +57,7 @@ ls "$PROJECT_ROOT/AGENTS.md" "$PROJECT_ROOT/CLAUDE.md" 2>/dev/null
 If the user explicitly asks to create, edit, replace, remove, or review project-local `AGENTS.md` or `CLAUDE.md`, the named local file is the target.
 
 - Do not substitute a global memory update for the requested local-file change.
-- Do not create or edit `~/.agentsmd` unless the user also asks for a global memory change.
+- Do not create or edit `~/.icodebyhand` unless the user also asks for a global memory change.
 - Do not copy global memory into the local file unless the user asks to migrate, import, or reuse it.
 - If local instructions and global memory both exist, local instructions remain authoritative.
 
@@ -85,8 +85,8 @@ basename "$PROJECT_ROOT"
 Examples:
 
 ```text
-~/.agentsmd/mym0404/i-code-by-hand/AGENTS.md
-~/.agentsmd/local-folder-name/AGENTS.md
+~/.icodebyhand/mym0404/i-code-by-hand/AGENTS.md
+~/.icodebyhand/local-folder-name/AGENTS.md
 ```
 
 ## Memory updates
@@ -110,7 +110,7 @@ Use this order when instructions overlap:
 
 1. Direct user instruction in the current conversation.
 2. Project-local `AGENTS.md` or `CLAUDE.md`.
-3. Global repo memory from `~/.agentsmd`.
+3. Global repo memory from `~/.icodebyhand`.
 4. General coding practices.
 
 If global memory conflicts with local project instructions, follow the local project instructions and mention the conflict briefly.
