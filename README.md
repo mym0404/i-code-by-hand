@@ -1,4 +1,6 @@
-# agentmd-delegate
+# AGENTS.md Delegate
+
+> For contributors who cannot add a `AGENTS.md` or `CLAUDE.md` to the projects they contribute to.
 
 Keep repo-specific agent notes outside the repo.
 
