@@ -1,6 +1,6 @@
 ---
 name: i-code-by-hand
-description: Use at the start of repository-specific coding, review, debugging, refactoring, explanation, and planning tasks to decide whether local AGENTS.md/CLAUDE.md or shared ~/.icodebyhand notes apply. Use shared repo-specific notes from ~/.icodebyhand when the project root does not provide AGENTS.md or CLAUDE.md. Also use when the user asks to remember, store, update, or revise repo-specific agent guidance without adding files to the project. Do not use it to replace explicit requests to create or edit project-local AGENTS.md or CLAUDE.md.
+description: Use at the start of repository-specific coding, review, debugging, refactoring, explanation, and planning tasks to decide whether local AGENTS.md/CLAUDE.md or shared ~/.icodebyhand notes apply. When the user explicitly invokes this skill for guidance or memory work, manage the repo-specific knowledge document under ~/.icodebyhand. Use shared repo-specific notes from ~/.icodebyhand when the project root does not provide AGENTS.md or CLAUDE.md. Also use when the user asks to remember, store, update, bootstrap, or revise repo-specific agent guidance without a clear local-file target. Do not use it to replace explicit requests to create or edit project-local AGENTS.md or CLAUDE.md.
 ---
 
 # i-code-by-hand
@@ -19,8 +19,10 @@ Global memory root:
 
 | Situation | Required behavior |
 | --- | --- |
+| User explicitly invokes this skill for guidance or memory work | Treat the task as global knowledge-document management under `~/.icodebyhand`. |
 | Project has `AGENTS.md` or `CLAUDE.md` | Follow local instructions. Do not read or apply `~/.icodebyhand` for normal work. |
 | Project has no local instruction file | Check `~/.icodebyhand/{repo-key}/AGENTS.md` before repo-specific work. |
+| Bootstrap asks for an instruction document but the target is unclear | Ask whether to create global `~/.icodebyhand/{repo-key}/AGENTS.md` or a project-local `AGENTS.md`/`CLAUDE.md` before writing. |
 | User asks to update global memory | Update only the matching `~/.icodebyhand` file unless they name a local file. |
 | User asks to create or edit local `AGENTS.md` or `CLAUDE.md` | Do exactly that local-file task. Do not redirect it to `~/.icodebyhand`. |
 
@@ -60,6 +62,17 @@ If the user explicitly asks to create, edit, replace, remove, or review project-
 - Do not create or edit `~/.icodebyhand` unless the user also asks for a global memory change.
 - Do not copy global memory into the local file unless the user asks to migrate, import, or reuse it.
 - If local instructions and global memory both exist, local instructions remain authoritative.
+
+## Bootstrap ambiguity
+
+If the task is an initial setup or bootstrap of agent instructions and the user has not clearly chosen global memory or a project-local instruction file, stop and ask a narrow question before creating or editing files.
+
+Ask the user to choose between:
+
+- Global repo memory: `~/.icodebyhand/{repo-key}/AGENTS.md`
+- Project-local instructions: `AGENTS.md` or `CLAUDE.md` in the project root
+
+Do not infer the target from convenience, existing folders, or the current agent. A bootstrap decision changes where future agents will look for instructions, so get an explicit answer first.
 
 ## Repo key
 
@@ -101,6 +114,8 @@ When the user asks to remember or update repo-specific guidance:
 6. Keep local project instructions authoritative when they exist.
 
 If the user says only "remember this", "store this for this repo", or "update memory", prefer global memory. If they name `AGENTS.md`, `CLAUDE.md`, "project file", or "local instructions", edit the local file they named.
+
+If the user explicitly invokes this skill while asking to store, revise, or organize guidance, use the global repo memory path even if local instruction files exist. Keep local project instructions authoritative for normal coding behavior, but do not let them prevent global knowledge-document maintenance.
 
 Do not store secrets, credentials, tokens, or private personal data. If a requested memory entry would be risky to persist, explain the risk and ask for a safer wording.
 
