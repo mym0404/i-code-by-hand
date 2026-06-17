@@ -50,14 +50,7 @@ Add this kind of bootstrap instruction to each agent that supports skills:
 Before repository-specific coding, review, debugging, refactoring, explanation, or planning, invoke the i-code-by-hand skill if it is available. Run it before making repo-specific assumptions. If the skill is unavailable, follow local AGENTS.md or CLAUDE.md first; when neither exists and the environment supports it, check ~/.icodebyhand/{repo-key}/AGENTS.md as the external memory entry point before continuing.
 ```
 
-Agent-specific wording:
-
-| Agent | Prompt wording |
-| --- | --- |
-| Codex | `Use $i-code-by-hand before coding, reviewing, debugging, or storing repo notes.` |
-| Claude Code | `Use the Skill tool to invoke i-code-by-hand before repo-specific work.` |
-| Copilot CLI | `Use the skill tool to invoke i-code-by-hand before repo-specific work.` |
-| Gemini CLI | `Use activate_skill for i-code-by-hand before repo-specific work.` |
+Use `$i-code-by-hand` to manage repo-specific instructions outside of the repo.
 
 ## Install
 
